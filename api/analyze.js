@@ -32,6 +32,7 @@ export default async function handler(req, res) {
     return res.status(200).json({ text });
   } catch (error) {
     console.error('Gemini API Error:', error);
-    return res.status(500).json({ error: 'AI 분석 중 오류가 발생했습니다.' });
+    // 에러 원인을 파악하기 위해 상세 메시지를 반환합니다. (디버깅용)
+    return res.status(500).json({ error: `AI 분석 중 오류 발생: ${error.message}` });
   }
 }
