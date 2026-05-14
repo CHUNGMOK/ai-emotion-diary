@@ -1,4 +1,5 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
+// 재배포 강제 실행 (Update: 2026-05-14 16:50)
 
 export default async function handler(req, res) {
   // POST 요청만 허용
