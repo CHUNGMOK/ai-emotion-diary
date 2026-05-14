@@ -21,8 +21,8 @@ export default async function handler(req, res) {
 
   try {
     const genAI = new GoogleGenerativeAI(API_KEY);
-    // 모델명을 더 호환성이 높은 최신 버전으로 변경합니다.
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash-latest" });
+    // API 버전을 'v1'으로 명시하여 호환성 문제를 해결합니다.
+    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" }, { apiVersion: "v1" });
 
     const prompt = `너는 심리 상담사야. 사용자가 작성한 일기 내용을 읽고 사용자의 감정을 한 단어(예: 기쁨, 슬픔, 분노, 불안, 평온)로 요약해줘. 그리고 그 감정에 공감해주고 따뜻한 응원의 메시지를 2~3문장으로 작성해 줘. 답변 형식은 반드시 '감정: [요약된 감정]\n[응원 메시지]'와 같이 줄 바꿈을 포함해서 보내줘.\n\n사용자의 일기 내용: ${content}`;
     
