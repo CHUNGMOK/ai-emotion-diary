@@ -1,3 +1,5 @@
+import { supabase } from './lib/supabaseClient.js';
+
 // 프론트엔드에서는 더 이상 GoogleGenerativeAI를 직접 호출하지 않습니다.
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -7,6 +9,58 @@ document.addEventListener('DOMContentLoaded', () => {
     const aiResponseText = document.getElementById('ai-response-text');
     const aiResponseBox = document.getElementById('ai-response-box');
     const historyList = document.getElementById('history-list');
+
+    // Auth UI Elements
+    const loginContainer = document.getElementById('login-container');
+    const appContainer = document.getElementById('app-container');
+    const emailInput = document.getElementById('email-input');
+    const passwordInput = document.getElementById('password-input');
+    const loginBtn = document.getElementById('login-btn');
+    const signupBtn = document.getElementById('signup-btn');
+    const googleLoginBtn = document.getElementById('google-login-btn');
+    const logoutBtn = document.getElementById('logout-btn');
+
+    // Check auth state
+    supabase.auth.onAuthStateChange((event, session) => {
+        if (session) {
+            loginContainer.style.display = 'none';
+            appContainer.style.display = 'block';
+            loadHistory(); // Load history when logged in
+        } else {
+            loginContainer.style.display = 'block';
+            appContainer.style.display = 'none';
+        }
+    });
+
+    // Auth Event Listeners
+    loginBtn.addEventListener('click', async () => {
+        const email = emailInput.value;
+        const password = passwordInput.value;
+        if (!email || !password) return alert('이메일과 비밀번호를 입력해주세요.');
+
+        const { error } = await supabase.auth.signInWithPassword({ email, password });
+        if (error) alert('로그인 실패: ' + error.message);
+    });
+
+    signupBtn.addEventListener('click', async () => {
+        const email = emailInput.value;
+        const password = passwordInput.value;
+        if (!email || !password) return alert('이메일과 비밀번호를 입력해주세요.');
+
+        const { error } = await supabase.auth.signUp({ email, password });
+        if (error) alert('회원가입 실패: ' + error.message);
+        else alert('회원가입 성공! 이메일을 확인하거나 로그인해주세요.');
+    });
+
+    googleLoginBtn.addEventListener('click', async () => {
+        const { error } = await supabase.auth.signInWithOAuth({ provider: 'google' });
+        if (error) alert('Google 로그인 실패: ' + error.message);
+    });
+
+    logoutBtn.addEventListener('click', async () => {
+        const { error } = await supabase.auth.signOut();
+        if (error) alert('로그아웃 실패: ' + error.message);
+    });
 
     // 백엔드 API를 사용하므로 더 이상 프론트엔드에 API 키를 노출하지 않습니다.
 
@@ -189,7 +243,12 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // 페이지 로드 시 히스토리 로드
-    loadHistory();
+    // 초기 상태 체크를 위해 세션을 가져옵니다. (onAuthStateChange가 처리하므로 필수는 아님)
+    supabase.auth.getSession().then(({ data: { session } }) => {
+        if (!session) {
+            loginContainer.style.display = 'block';
+            appContainer.style.display = 'none';
+        }
+    });
 });
 

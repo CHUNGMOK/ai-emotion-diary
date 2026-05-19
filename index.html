@@ -17,10 +17,42 @@
         <div class="blob blob-3"></div>
     </div>
 
-    <main class="container">
+    <!-- Login Screen -->
+    <main class="container" id="login-container">
+        <header class="header">
+            <h1>AI 감정 일기</h1>
+            <p class="subtitle">마음을 기록하고 AI와 대화해보세요.</p>
+        </header>
+        
+        <div class="login-form">
+            <div class="input-wrapper">
+                <input type="email" id="email-input" class="auth-input" placeholder="이메일 주소" />
+            </div>
+            <div class="input-wrapper">
+                <input type="password" id="password-input" class="auth-input" placeholder="비밀번호" />
+            </div>
+            <div class="button-group auth-buttons">
+                <button id="login-btn" class="btn btn-primary">로그인</button>
+                <button id="signup-btn" class="btn btn-secondary">회원가입</button>
+            </div>
+            
+            <div class="divider">
+                <span>또는</span>
+            </div>
+            
+            <button id="google-login-btn" class="btn btn-google">
+                <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google Logo" class="google-icon" />
+                Google로 로그인
+            </button>
+        </div>
+    </main>
+
+    <!-- Main App Screen (Hidden by default) -->
+    <main class="container" id="app-container" style="display: none;">
         <header class="header">
             <h1 id="main-title">오늘의 하루는 어땠나요?</h1>
             <p class="subtitle">당신의 소중한 순간들을 기록해주세요.</p>
+            <button id="logout-btn" class="btn-logout">로그아웃</button>
         </header>
 
         <section class="diary-section">

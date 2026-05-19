@@ -140,7 +140,19 @@ textarea {
     box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
 }
 
-textarea:focus {
+.auth-input {
+    width: 100%;
+    padding: 16px 20px;
+    border-radius: 12px;
+    border: 2px solid transparent;
+    background: rgba(255, 255, 255, 0.5);
+    font-family: inherit;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
+}
+
+textarea:focus, .auth-input:focus {
     outline: none;
     border-color: #764ba2;
     background: #fff;
@@ -190,6 +202,28 @@ textarea:focus {
     transform: translateY(-2px);
 }
 
+.btn-google {
+    background: #fff;
+    color: #444;
+    border: 1px solid #ddd;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    margin-top: 10px;
+    width: 100%;
+    font-weight: 500;
+}
+
+.btn-google:hover {
+    background: #fdfdfd;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+}
+
+.google-icon {
+    width: 20px;
+    height: 20px;
+    margin-right: 4px;
+}
+
 .btn-secondary.recording {
     background: #fff0f6;
     border-color: #f06595;
@@ -205,6 +239,42 @@ textarea:focus {
 
 .btn:active {
     transform: translateY(0);
+}
+
+.divider {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    margin: 25px 0 15px;
+    color: var(--text-sub);
+    font-size: 0.9rem;
+}
+
+.divider::before, .divider::after {
+    content: '';
+    flex: 1;
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+}
+
+.divider span {
+    padding: 0 15px;
+}
+
+.btn-logout {
+    background: transparent;
+    border: 1px solid rgba(118, 75, 162, 0.3);
+    color: var(--text-sub);
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-top: 15px;
+}
+
+.btn-logout:hover {
+    background: rgba(118, 75, 162, 0.05);
+    color: var(--accent-color);
 }
 
 /* Result Section */
