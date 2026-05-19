@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const analyzeBtn = document.getElementById('analyze-btn');
     const aiResponseText = document.getElementById('ai-response-text');
     const aiResponseBox = document.getElementById('ai-response-box');
+    const historyList = document.getElementById('history-list');
 
     // 백엔드 API를 사용하므로 더 이상 프론트엔드에 API 키를 노출하지 않습니다.
 
@@ -42,6 +43,10 @@ document.addEventListener('DOMContentLoaded', () => {
             // 3. 결과 표시
             aiResponseBox.style.opacity = '1';
             aiResponseText.textContent = data.text;
+            
+            // 일기 내용 초기화 및 히스토리 최신화
+            diaryInput.value = '';
+            loadHistory();
         } catch (error) {
             console.error("API Error:", error);
             aiResponseText.textContent = error.message || "죄송합니다. 분석 중 오류가 발생했습니다. 다시 시도해주세요.";
@@ -102,5 +107,89 @@ document.addEventListener('DOMContentLoaded', () => {
             alert('죄송합니다. 현재 브라우저에서는 음성 인식 기능을 지원하지 않습니다. 크롬 브라우저를 권장합니다.');
         });
     }
+
+    // 히스토리 가져오기 및 렌더링
+    async function loadHistory() {
+        try {
+            const response = await fetch('/api/history');
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.error || '히스토리를 불러오는 중 오류가 발생했습니다.');
+            }
+
+            renderHistory(data.history);
+        } catch (error) {
+            console.error("History Fetch Error:", error);
+            historyList.innerHTML = `<p class="error-history">❌ 히스토리를 불러오지 못했습니다: ${error.message}</p>`;
+        }
+    }
+
+    // 히스토리 카드 렌더링 함수
+    function renderHistory(history) {
+        if (!history || history.length === 0) {
+            historyList.innerHTML = `
+                <div class="no-history">
+                    <span class="icon">✍️</span>
+                    <p>아직 저장된 일기가 없습니다.<br>오늘의 하루를 첫 번째로 기록해 보세요!</p>
+                </div>
+            `;
+            return;
+        }
+
+        historyList.innerHTML = history.map(item => {
+            let dateStr = "";
+            try {
+                if (item.id && item.id.startsWith("diary-")) {
+                    const rawDate = item.id.substring(6); // YYYYMMDDHHmmssSSS
+                    const year = rawDate.substring(0, 4);
+                    const month = rawDate.substring(4, 6);
+                    const day = rawDate.substring(6, 8);
+                    const hour = rawDate.substring(8, 10);
+                    const minute = rawDate.substring(10, 12);
+                    dateStr = `${year}년 ${month}월 ${day}일 ${hour}:${minute}`;
+                } else {
+                    const date = new Date(item.createdAt);
+                    dateStr = date.toLocaleString('ko-KR');
+                }
+            } catch (e) {
+                dateStr = "알 수 없는 날짜";
+            }
+
+            return `
+                <div class="history-card">
+                    <div class="history-card-header">
+                        <span class="history-date">📅 ${dateStr}</span>
+                    </div>
+                    <div class="history-card-body">
+                        <div class="history-diary">
+                            <span class="badge badge-diary">내 일기</span>
+                            <p>${escapeHtml(item.content)}</p>
+                        </div>
+                        <div class="history-ai">
+                            <span class="badge badge-ai">AI 상담사</span>
+                            <p>${escapeHtml(item.aiResponse).replace(/\n/g, '<br>')}</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }).join('');
+    }
+
+    // HTML 이스케이프 함수 (XSS 방지)
+    function escapeHtml(string) {
+        return String(string).replace(/[&<>"']/g, function (s) {
+            return {
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#39;'
+            }[s];
+        });
+    }
+
+    // 페이지 로드 시 히스토리 로드
+    loadHistory();
 });
 
