@@ -49,7 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const { error } = await supabase.auth.signUp({ email, password });
         if (error) alert('회원가입 실패: ' + error.message);
-        else alert('회원가입 성공! 이메일을 확인하거나 로그인해주세요.');
+        else alert('가입확인 이메일을 확인해주세요!');
     });
 
     googleLoginBtn.addEventListener('click', async () => {
