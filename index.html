@@ -49,10 +49,15 @@
 
     <!-- Main App Screen (Hidden by default) -->
     <main class="container" id="app-container" style="display: none;">
-        <header class="header">
-            <h1 id="main-title">오늘의 하루는 어땠나요?</h1>
-            <p class="subtitle">당신의 소중한 순간들을 기록해주세요.</p>
-            <button id="logout-btn" class="btn-logout">로그아웃</button>
+        <header class="header app-header">
+            <div class="header-titles">
+                <h1 id="main-title">오늘의 하루는 어땠나요?</h1>
+                <p class="subtitle">당신의 소중한 순간들을 기록해주세요.</p>
+            </div>
+            <div class="user-info">
+                <span id="user-email" class="user-email"></span>
+                <button id="logout-btn" class="btn-logout">로그아웃</button>
+            </div>
         </header>
 
         <section class="diary-section">

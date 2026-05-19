@@ -19,16 +19,19 @@ document.addEventListener('DOMContentLoaded', () => {
     const signupBtn = document.getElementById('signup-btn');
     const googleLoginBtn = document.getElementById('google-login-btn');
     const logoutBtn = document.getElementById('logout-btn');
+    const userEmailSpan = document.getElementById('user-email');
 
     // Check auth state
     supabase.auth.onAuthStateChange((event, session) => {
         if (session) {
             loginContainer.style.display = 'none';
             appContainer.style.display = 'block';
+            userEmailSpan.textContent = session.user.email;
             loadHistory(); // Load history when logged in
         } else {
             loginContainer.style.display = 'block';
             appContainer.style.display = 'none';
+            userEmailSpan.textContent = '';
         }
     });
 
@@ -248,6 +251,11 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!session) {
             loginContainer.style.display = 'block';
             appContainer.style.display = 'none';
+        } else {
+            loginContainer.style.display = 'none';
+            appContainer.style.display = 'block';
+            userEmailSpan.textContent = session.user.email;
+            loadHistory();
         }
     });
 });
